@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    command: pnpm dev --filter api
+    volumes:
+      - .:/app
+    ports:
+      - "4000:4000"
+    environment:
+      - SERVICE_TYPE=Gateway
+
+  user:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    command: pnpm dev --filter api
+    volumes:
+      - .:/app
+    ports:
+      - "4000"
+    environment:
+      - SERVICE_TYPE=Auth
+
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    command: pnpm dev --filter web
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: user
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+      - "6222:6222"
+      - "8222:8222"
+
+volumes:
+  mongo-data:
+  mongo-config:
