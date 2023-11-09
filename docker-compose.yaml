@@ -8,6 +8,8 @@ services:
     command: pnpm dev --filter api
     volumes:
       - .:/app
+      - /app/node_modules
+      - /app/apps/api/node_modules
     ports:
       - "4000:4000"
     environment:
@@ -20,6 +22,8 @@ services:
     command: pnpm dev --filter api
     volumes:
       - .:/app
+      - /app/node_modules
+      - /app/apps/api/node_modules
     ports:
       - "4000"
     environment:
@@ -32,6 +36,8 @@ services:
     command: pnpm dev --filter web
     volumes:
       - .:/app
+      - /app/node_modules
+      - /app/apps/web/node_modules
     ports:
       - "3000:3000"
 
